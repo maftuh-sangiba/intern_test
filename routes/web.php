@@ -34,7 +34,7 @@ Route::get("/logout", function() {
 // End Authentication
 
 Route::middleware(["auth"])->group(function() {
-    Route::get("/app/dashboard", DashboardController::class)->name("app.dashboard");
+    Route::get("/app/dashboard", DashboardController::class)->name("app.dashboard")->middleware("check_authorized:002D");
 
     Route::post("/app/users/get", [UserController::class, "get"])->name("app.users.get");
     Route::resource("/app/users", UserController::class, ["as" => "app"]);
