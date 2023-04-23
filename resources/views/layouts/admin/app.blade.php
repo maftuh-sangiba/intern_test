@@ -3,11 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>{{ $title ?? "Dahsboard" }} - Your System</title>
-  
+
   <link rel="stylesheet" href="{{ asset('vendor/datatables-bs5/datatables.min.css?v=') . random_string(7) }}">
   <link rel="stylesheet" href="{{ asset('assets/vendors/sweetalert2/sweetalert2.min.css?v=' . random_string(7)) }}">
 
@@ -29,7 +29,7 @@
     </div>
 
     <div id="app">
-        
+
         @include('layouts.admin.sidebar')
 
         <div id="main">
@@ -38,7 +38,7 @@
                     <i class="bi bi-justify fs-3"></i>
                 </a>
             </header>
-            
+
             <div class="page-heading">
                 <div class="page-title">
                     <div class="row mb-2 dropdown-user">
@@ -66,7 +66,7 @@
                 </div>
 
                 <section class="section">
-                  
+
                   @yield('content')
 
                 </section>
@@ -82,6 +82,7 @@
   <script src="{{ asset('vendor/datatables-bs5/datatables.min.js?v=') . random_string(7) }}"></script>
   <script src="{{ asset('assets/js/app.js?v=') . random_string(7) }}"></script>
   <script src="{{ asset('assets/js/core.js?v=') . random_string(7) }}"></script>
+  @livewireScripts
   @stack('script')
 
 </body>
