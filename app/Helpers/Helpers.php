@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 if (!function_exists("create_response")) {
   function create_response()
@@ -24,7 +24,7 @@ if (!function_exists("response_success_default")) {
         "id" => $id
       ];
     }
-    
+
     $response->message = $message;
     if ($next_url) {
       $response->next_url = $next_url;
@@ -56,7 +56,7 @@ if (!function_exists("response_json")) {
 if (!function_exists("response_data")) {
   function response_data($data) {
     $response = create_response();
-    
+
     if (count($data) > 0) {
       $response->status = TRUE;
       $response->status_code = 200;
@@ -84,5 +84,11 @@ if (!function_exists("form_delete")) {
     $html .= "</form>";
 
     return $html;
+  }
+}
+
+if (!function_exists("check_authorized")) {
+  function check_authorized($module_code) {
+    return (new \App\Services\AuthorizationService)->check_authorization($module_code);
   }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Apps\DashboardController;
+use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,8 @@ Route::get("/logout", function() {
 Route::middleware(["auth"])->group(function() {
     Route::get("/app/dashboard", DashboardController::class)->name("app.dashboard")->middleware("check_authorized:002D");
 
-    Route::post("/app/users/get", [UserController::class, "get"])->name("app.users.get");
-    Route::resource("/app/users", UserController::class, ["as" => "app"]);
+    Route::post("/app/users/get", [UserController::class, "get"])->name("app.users.get")->middleware("check_authorized:003U");
+    Route::resource("/app/users", UserController::class, ["as" => "app"])->middleware("check_authorized:003U");
+
+    Route::resource("/app/roles", RoleController::class, ["as" => "app"])->middleware("check_authorized:004R");
 });
