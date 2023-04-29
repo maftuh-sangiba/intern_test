@@ -11,7 +11,7 @@ class UserService extends BaseService
 {
   /**
    * Generate query index page
-   * 
+   *
    * @param Request $request
    */
   private function generate_query_get(Request $request)
@@ -44,6 +44,10 @@ class UserService extends BaseService
       $results = $results->orderBy(key($order), $order[key($order)]);
     }
 
+    if (auth()->user()->role_id != 1) {
+        $results->where("role_id", "!=", 1);
+    }
+
     return $results;
   }
 
@@ -63,7 +67,7 @@ class UserService extends BaseService
 
   /**
    * Store new user
-   * 
+   *
    * @param Request $request
    */
   public function store(Request $request)
@@ -80,10 +84,10 @@ class UserService extends BaseService
 
     return $response;
   }
-  
+
   /**
    * Update new user
-   * 
+   *
    * @param Request $request
    * @param User $user
    */
