@@ -41,4 +41,5 @@ Route::middleware(["auth"])->group(function() {
     Route::resource("/app/users", UserController::class, ["as" => "app"])->middleware("check_authorized:003U");
 
     Route::resource("/app/roles", RoleController::class, ["as" => "app"])->middleware("check_authorized:004R");
+    Route::post("/app/roles/{role}/assign-user", [RoleController::class, "assign_user"])->name("app.roles.assign_user")->middleware("check_authorized:004R");
 });

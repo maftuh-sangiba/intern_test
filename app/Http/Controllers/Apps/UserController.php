@@ -21,7 +21,7 @@ class UserController extends Controller
 
     /**
      * Get list user
-     * 
+     *
      * @param Request $request
      */
     public function get(Request $request)
@@ -92,8 +92,7 @@ class UserController extends Controller
         if (UserValidation::fails()) {
             return ResponseValidation::response(UserValidation::errors());
         }
-        dd(UserValidation::fails());
-
+        
         $response = $this->user_service->store($request);
         return \response_json($response);
     }

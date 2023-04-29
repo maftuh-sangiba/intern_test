@@ -66,7 +66,7 @@ class RoleController extends Controller
     $data = [
       "role" => $role,
       "users" => User::query()->where("role_id", $role->id)->get(),
-      "user_other" => User::query()->where("role_id", "!=", $role->id)->where("id", "!=", 1)->get()
+      "user_other" => User::query()->with("role")->where("role_id", "!=", $role->id)->where("id", "!=", 1)->get()
     ];
 
     return $this->view_admin("admin.roles.show", "Detail Role", $data);
@@ -112,5 +112,21 @@ class RoleController extends Controller
   public function destroy($id)
   {
     //
+  }
+
+  /**
+   * Assign user
+   *
+   * @param Request $request
+   * @param Role $role
+   */
+  public function assign_user(Request $request, Role $role)
+  {
+    User::query()->whereIn("id", $request->only("user_id"))->update([
+      "role_id" => $role->id
+    ]);
+
+    $response = response_success_default("Berhasil assign user!", $role->id, route("app.roles.show", $role->id));
+    return response_json($response);
   }
 }
