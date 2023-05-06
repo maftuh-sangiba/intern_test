@@ -4,6 +4,7 @@ use App\Http\Controllers\Apps\DashboardController;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\UserController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Models\SessionToken;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -30,11 +31,13 @@ Route::post("/login", [LoginController::class, "store"])->name("login.store");
 Route::get("/logout", function() {
     Auth::logout();
     Alert::success("Sukses!", "Berhasil logout!");
+    SessionToken::query()->where("session_token", session("session_token"))->update(["is_login" => 0]);
+
     return redirect()->route("login");
 });
 // End Authentication
 
-Route::middleware(["auth"])->group(function() {
+Route::middleware(["auth", "check_session_token"])->group(function() {
     Route::get("/app/dashboard", DashboardController::class)->name("app.dashboard")->middleware("check_authorized:002D");
 
     Route::post("/app/users/get", [UserController::class, "get"])->name("app.users.get")->middleware("check_authorized:003U");

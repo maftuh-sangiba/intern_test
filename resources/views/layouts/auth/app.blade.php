@@ -31,6 +31,7 @@
     <script src="{{ asset('assets/vendors/sweetalert2/sweetalert2.min.js?v=' . random_string(7)) }}"></script>
     @include('sweetalert::alert')
     <script src="{{ asset('assets/js/core.js?v=' . random_string(7)) }}"></script>
+    {!! session("message") !!}
 </body>
 
 </html>
