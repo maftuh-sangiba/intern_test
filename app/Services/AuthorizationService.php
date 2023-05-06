@@ -45,10 +45,10 @@ class AuthorizationService
             break;
           }
         }
-      } else if (count($explode_or) > 2) {
+      } else if (count($explode_or) > 1) {
         $allow = FALSE;
 
-        foreach ($explode_and as $module_code) {
+        foreach ($explode_or as $module_code) {
           if (in_array($module_code, $list_module_code)) {
             $allow = TRUE;
             break;
