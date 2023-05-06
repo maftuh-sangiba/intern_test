@@ -1,5 +1,6 @@
 <?php namespace App\Services\Auth;
 
+use App\Models\ProjectSetting;
 use App\Models\SessionToken;
 use App\Models\User;
 use App\Services\Cores\BaseService;
@@ -33,6 +34,27 @@ class LoginService extends BaseService
   }
 
   /**
+   * Check login multi device
+   *
+   * @param int $user_id
+   * @return bool
+   */
+  private function check_multi_login($user_id)
+  {
+    $check_allow_multi_login = ProjectSetting::query()->where("multi_login_device", 1)->exists();
+
+    if (!$check_allow_multi_login) {
+      $get_user_login = SessionToken::query()->where("user_id", $user_id)->where("is_login", 1)->where("expire_time", ">", date("Y-m-d H:i:s"))->exists();
+
+      if ($get_user_login) {
+        return FALSE;
+      }
+    }
+
+    return TRUE;
+  }
+
+  /**
    * Store login
    *
    * @param Request $request
@@ -49,14 +71,21 @@ class LoginService extends BaseService
 
     if ($get_user) {
       if (Hash::check($request->password, $get_user->password)) {
-        $remember = $request->has("remember_me");
-        Auth::loginUsingId($get_user->id, $remember);
+        $check_multi_login = $this->check_multi_login($get_user->id);
 
-        $this->create_session_token($get_user->id);
-        $response->status = TRUE;
-        $response->status_code = 200;
-        $response->message = "Success!";
-        $response->next_url = \route("app.dashboard");
+        if ($check_multi_login) {
+          $remember = $request->has("remember_me");
+          Auth::loginUsingId($get_user->id, $remember);
+
+          $this->create_session_token($get_user->id);
+          $response->status = TRUE;
+          $response->status_code = 200;
+          $response->message = "Success!";
+          $response->next_url = \route("app.dashboard");
+        } else {
+          $response->message = "Saat ini user sedang login pada perangkat lain!";
+          $response->status_code = 403;
+        }
       } else {
         $response->message = "Password salah!";
         $response->status_code = 403;
