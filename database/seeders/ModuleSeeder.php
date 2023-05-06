@@ -39,5 +39,10 @@ class ModuleSeeder extends Seeder
             "module_name" => "Assign Role to Module",
             "module_code" => "004RT"
         ]);
+
+        Module::create([
+            "module_name" => "Allow Settings",
+            "module_code" => "005S"
+        ]);
     }
 }

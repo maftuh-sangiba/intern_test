@@ -18,11 +18,11 @@
               </div>
           </div>
       </div>
-      
+
       <div class="sidebar-menu">
           <ul class="menu">
               <li class="sidebar-title">Menu</li>
-              
+
               <li
                   class="sidebar-item {{ request()->segment(2) == 'dashboard' ? 'active' : '' }}">
                   <a href="{{ route('app.dashboard') }}" class='sidebar-link'>
@@ -31,15 +31,27 @@
                   </a>
               </li>
 
-              <li
-                  class="sidebar-item {{ request()->segment(2) == 'users' ? 'active' : '' }}">
-                  <a href="{{ route('app.users.index') }}" class='sidebar-link'>
-                    <i class="bi bi-person-lines-fill"></i>
-                      <span>Users</span>
-                  </a>
-              </li>
-              
-              
+              @if (check_authorized("003U|004R"))
+                <li
+                    class="sidebar-item {{ request()->segment(2) == 'users' ? 'active' : '' }}">
+                    <a href="{{ route('app.users.index') }}" class='sidebar-link'>
+                      <i class="bi bi-person-lines-fill"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+              @endif
+
+              @if (check_authorized("005S"))
+                <li
+                    class="sidebar-item {{ request()->segment(2) == 'settings' ? 'active' : '' }}">
+                    <a href="{{ route('app.settings.index') }}" class='sidebar-link'>
+                      <i class="bi bi-gear"></i>
+                        <span>Setting</span>
+                    </a>
+                </li>
+              @endif
+
+
           </ul>
       </div>
   </div>
