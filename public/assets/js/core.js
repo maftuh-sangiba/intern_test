@@ -273,8 +273,8 @@ const CORE = {
             options = {
                 headers: {
                     "X-CSRF-TOKEN": CORE.csrfToken,
-                    "Conten-Type": "application/json",
-                    // "Accept": "application/json"
+                    // "Content-Type": "application/json",
+                    "Accept": "application/json"
                 },
                 method: "POST",
                 body: new FormData(form),
@@ -283,22 +283,25 @@ const CORE = {
 
         const request = await fetch(url, options);
 
-        const response = await request.json();
         CORE.removeLoadAdmin();
 
-        if (response.status_code == 200) {
+        if (request.status == 200) {
+            const response = await request.json();
             CORE.sweet("success", "Sukses!", response.message);
             window.setTimeout(
                 () => (window.location.href = response.next_url),
                 1500
             );
-        } else if (response.status_code == 400) {
+        } else if (request.status == 400) {
+            const response = await request.json();
             CORE.sweet("error", "Gagal!", "Terdapat input yang salah!");
             CORE.insertValidationErrors(response.data);
-        } else if (response.status_code == 422) {
+        } else if (request.status == 422) {
+            const response = await request.json();
             CORE.sweet("error", "Gagal!", "Terdapat input yang salah!");
             CORE.insertValidationErrorsNew(response.errors);
         } else {
+            const response = await request.json();
             CORE.sweet("error", "Gagal!", response.message);
         }
     },
@@ -348,6 +351,7 @@ const CORE = {
     },
 
     insertValidationErrorsNew(data) {
+        console.log(data);
         const listInput = document.querySelectorAll(
             "form[with-submit-crud] .form-control"
         );
