@@ -295,6 +295,9 @@ const CORE = {
         } else if (response.status_code == 400) {
             CORE.sweet("error", "Gagal!", "Terdapat input yang salah!");
             CORE.insertValidationErrors(response.data);
+        } else if (response.status_code == 422) {
+            CORE.sweet("error", "Gagal!", "Terdapat input yang salah!");
+            CORE.insertValidationErrorsNew(response.errors);
         } else {
             CORE.sweet("error", "Gagal!", response.message);
         }
@@ -332,6 +335,32 @@ const CORE = {
         listInput.forEach((input) => {
             let inputName = input.name;
             let findInput = listNameError.find((d) => d == inputName);
+
+            if (findInput) {
+                input.classList.add("is-invalid");
+                input.nextElementSibling.innerHTML = `<small class="text-danger">${data[findInput][0]}</small>`;
+            } else {
+                // console.log(input);
+                input.nextElementSibling.innerHTML = ``;
+                input.classList.remove("is-invalid");
+            }
+        });
+    },
+
+    insertValidationErrorsNew(data) {
+        const listInput = document.querySelectorAll(
+            "form[with-submit-crud] .form-control"
+        );
+        // console.log(listInput);
+        const listNameError = Object.keys(data);
+
+        listInput.forEach((input) => {
+            let validationID = "";
+            if (input.hasAttribute("data-validation-id")) {
+                validationID = input.getAttribute("data-validation-id");
+            }
+            let inputName = input.name;
+            let findInput = listNameError.find((d) => d == inputName || d == validationID);
 
             if (findInput) {
                 input.classList.add("is-invalid");
