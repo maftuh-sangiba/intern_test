@@ -38,7 +38,7 @@ Route::get("/logout", function () {
 });
 // End Authentication
 
-Route::middleware(["auth", "check_session_token"])->group(function () {
+Route::middleware(["auth", "check_maintanance", "check_session_token"])->group(function () {
   Route::get("/app/dashboard", DashboardController::class)->name("app.dashboard")->middleware("check_authorized:002D");
 
   Route::post("/app/users/get", [UserController::class, "get"])->name("app.users.get")->middleware("check_authorized:003U");
@@ -50,3 +50,8 @@ Route::middleware(["auth", "check_session_token"])->group(function () {
   Route::get("/app/settings", [ProjectSettingController::class, "index"])->name("app.settings.index")->middleware("check_authorized:005S");
   Route::put("/app/settings", [ProjectSettingController::class, "update"])->name("app.settings.update")->middleware("check_authorized:005S");
 });
+
+Route::get("/maintenance", function() {
+    auth()->logout();
+    return view("admin.maintenance");
+})->name("maintenance")->middleware("check_maintanance");

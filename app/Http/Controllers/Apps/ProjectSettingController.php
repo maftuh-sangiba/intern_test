@@ -71,7 +71,8 @@ class ProjectSettingController extends Controller
   public function update(Request $request)
   {
     ProjectSetting::query()->where("id", 1)->update([
-      "multi_login_device" => $request->has("multi_login_device") ? 1 : 0
+      "multi_login_device" => $request->has("multi_login_device") ? 1 : 0,
+      "is_maintenance" => $request->has("is_maintenance") ? 1 : 0,
     ]);
 
     $response = response_success_default("Berhasil update setting!", FALSE, route("app.settings.index"));
