@@ -8,8 +8,7 @@
       <form action="{{ route('app.users.store') }}" method="POST" with-submit-crud>
         @csrf
 
-        {{-- @include('admin.users.form') --}}
-        @livewire('apps.admin.user-form', ['roles' => $roles])
+        @include('admin.users.form')
 
         <button class="btn btn-success btn-sm mt-3">Tambah User</button>
 

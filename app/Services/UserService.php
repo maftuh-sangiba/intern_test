@@ -1,5 +1,6 @@
 <?php namespace App\Services;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Services\Cores\BaseService;
 use App\Services\Cores\ErrorService;
@@ -70,10 +71,10 @@ class UserService extends BaseService
    *
    * @param Request $request
    */
-  public function store(Request $request)
+  public function store(UserRequest $request)
   {
     try {
-      $values = UserValidation::validated();
+      $values = $request->validated();
       $user = User::create($values);
 
       $response = \response_success_default("Berhasil menambahkan user!", $user->id, route("app.users.show", $user->id));
@@ -91,11 +92,11 @@ class UserService extends BaseService
    * @param Request $request
    * @param User $user
    */
-  public function update(Request $request, User $user)
+  public function update(UserRequest $request, User $user)
   {
     try {
       $user_id = $user->id;
-      $values = UserValidation::validated();
+      $values = $request->validated();
       if ($values["password"]) {
         $values["password"] = Hash::make($values["password"]);
       } else {
