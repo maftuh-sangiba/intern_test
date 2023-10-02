@@ -1,11 +1,13 @@
 <?php namespace App\Services;
 
 use App\Http\Requests\UserRequest;
+use App\Models\SessionToken;
 use App\Models\User;
 use App\Services\Cores\BaseService;
 use App\Services\Cores\ErrorService;
 use App\Validations\UserValidation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserService extends BaseService
@@ -75,6 +77,7 @@ class UserService extends BaseService
   {
     try {
       $values = $request->validated();
+      $values["password"] = Hash::make($values["password"]);
       $user = User::create($values);
 
       $response = \response_success_default("Berhasil menambahkan user!", $user->id, route("app.users.show", $user->id));
@@ -113,5 +116,37 @@ class UserService extends BaseService
     }
 
     return $response;
+  }
+
+  /**
+   * Get last admin online
+   *
+   */
+  public function get_admin_online()
+  {
+    $query = SessionToken::query()
+          ->select([
+            "u.name", "session_tokens.active_time", "u.id"
+          ])
+          ->join("users AS u", "u.id", "session_tokens.user_id")
+          ->where("session_tokens.active_time", ">", DB::raw("(NOW() - INTERVAL 15 MINUTE)"))
+          ->where("is_login", 1)
+          ->groupBy("session_tokens.user_id")
+          ->get()
+          ->map(function($item) {
+            $to_time = strtotime(date("Y-m-d H:i:s"));
+            $from_time = strtotime($item->active_time);
+            $last_active = round(abs($to_time - $from_time) / 60);
+            if ($last_active <= 0) {
+              $last_active = "Active";
+            } else {
+              $last_active .= "m ago";
+            }
+
+            $item->last_active = $last_active;
+            return $item;
+          });
+
+    return $query;
   }
 }
