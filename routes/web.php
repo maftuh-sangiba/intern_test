@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Apps\DashboardController;
+use App\Http\Controllers\Apps\ProdukController;
 use App\Http\Controllers\Apps\ProjectSettingController;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\UserController;
@@ -49,6 +50,9 @@ Route::middleware(["auth", "check_maintanance", "check_session_token"])->group(f
 
   Route::get("/app/settings", [ProjectSettingController::class, "index"])->name("app.settings.index")->middleware("check_authorized:005S");
   Route::put("/app/settings", [ProjectSettingController::class, "update"])->name("app.settings.update")->middleware("check_authorized:005S");
+
+  Route::post("/app/produk/get", [ProdukController::class, "get"])->name("app.produk.get");
+  Route::resource("/app/produk", ProdukController::class, ["as" => "app"]);
 });
 
 Route::get("/maintenance", function() {

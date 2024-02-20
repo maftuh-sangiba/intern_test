@@ -31,6 +31,14 @@
                   </a>
               </li>
 
+              <li
+                  class="sidebar-item {{ request()->segment(2) == 'produk' ? 'active' : '' }}">
+                  <a href="{{ route('app.produk.index') }}" class='sidebar-link'>
+                      <i class="bi bi-bag-fill"></i>
+                      <span>Produk</span>
+                  </a>
+              </li>
+
               @if (check_authorized("003U|004R"))
                 <li
                     class="sidebar-item {{ request()->segment(2) == 'users' ? 'active' : '' }}">
