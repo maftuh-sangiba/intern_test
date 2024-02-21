@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProdukRequest;
 use App\Models\Produk;
-use App\Http\Requests\StoreProdukRequest;
-use App\Http\Requests\UpdateProdukRequest;
 use App\Services\ProdukService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
@@ -41,12 +41,13 @@ class ProdukController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreProdukRequest  $request
+     * @param  \App\Http\Requests\ProdukRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProdukRequest $request)
+    public function store(ProdukRequest $request)
     {
-        //
+        $response = $this->produk_service->store($request);
+        return \response_json($response);
     }
 
     /**
@@ -60,7 +61,8 @@ class ProdukController extends Controller
         $data = [
             "produk" => $produk
         ];
-        return $this->view_admin("admin.users.show", "Detail User", $data);
+
+        return $this->view_admin("admin.produk.show", "Detail Produk", $data);
     }
 
     /**
@@ -71,19 +73,24 @@ class ProdukController extends Controller
      */
     public function edit(Produk $produk)
     {
-        //
+        $data = [
+            "produk" => $produk
+        ];
+      
+        return $this->view_admin("admin.produk.edit", "Edit Produk", $data);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateProdukRequest  $request
+     * @param  \App\Http\Requests\ProdukRequest  $request
      * @param  \App\Models\Produk  $produk
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProdukRequest $request, Produk $produk)
+    public function update(ProdukRequest $request, Produk $produk)
     {
-        //
+        $response = $this->produk_service->update($request, $produk);
+        return \response_json($response);
     }
 
     /**
@@ -94,7 +101,9 @@ class ProdukController extends Controller
      */
     public function destroy(Produk $produk)
     {
-        //
+        $produk->delete();
+        $response = \response_success_default("Berhasil hapus produk!", FALSE, \route("app.produk.index"));
+        return \response_json($response);
     }
 
     public function get(Request $request)
@@ -115,7 +124,7 @@ class ProdukController extends Controller
             $row[] = $produk->product_price_capital;
             $row[] = $produk->product_price_sell;
             $button = "<a href='" . \route("app.produk.show", $produk->id) . "' class='btn btn-info btn-sm m-1'>Detail</a>";
-            $button .= form_delete("formUser$produk->id", route("app.users.destroy", $produk->id));
+            $button .= form_delete("formUser$produk->id", route("app.produk.destroy", $produk->id));
             $row[] = $button;
             $data[] = $row;
         }

@@ -1,4 +1,4 @@
 <x-forms.input-grid col1="2" col2="6" label="Product Name" name="product_name" value="{{ $produk->product_name ?? '' }}" placeholder="Input product name..."></x-forms.input-grid>
 <x-forms.input-grid col1="2" col2="6" label="Product Description" name="product_description" value="{{ $produk->product_description ?? '' }}" placeholder="Input product descriptions..."></x-forms.input-grid>
-<x-forms.input-grid col1="2" col2="6" label="Product Price Capital" name="product_price_capital" type="email" value="{{ $produk->product_price_capital ?? '' }}" placeholder="Input product price capital..."></x-forms.input-grid>
-<x-forms.input-grid col1="2" col2="6" label="Product Price Sell" name="product_price_sell" value="{{ $produk->product_price_sell ?? '' }}" placeholder="Input product price sell..."></x-forms.input-grid>
+<x-forms.input-grid col1="2" col2="6" label="Product Price Capital" name="product_price_capital" type="number" value="{{ $produk->product_price_capital ?? '' }}" placeholder="Input product price capital..."></x-forms.input-grid>
+<x-forms.input-grid col1="2" col2="6" label="Product Price Sell" name="product_price_sell" type="number" value="{{ $produk->product_price_sell ?? '' }}" placeholder="Input product price sell..."></x-forms.input-grid>

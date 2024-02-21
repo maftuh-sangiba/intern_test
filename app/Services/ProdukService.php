@@ -1,5 +1,6 @@
 <?php namespace App\Services;
 
+use App\Http\Requests\ProdukRequest;
 use App\Models\Produk;
 use App\Models\SessionToken;
 use App\Services\Cores\BaseService;
@@ -14,7 +15,7 @@ class ProdukService extends BaseService
   {
     $column_search = ["produks.product_name"];
     $column_order = [NULL, "produks.product_name"];
-    $order = ["produks.id" => "DESC"];
+    $order = ["produks.id" => "ASC"];
 
     $results = Produk::query()
       ->where(function ($query) use ($request, $column_search) {
@@ -60,44 +61,35 @@ class ProdukService extends BaseService
     return $this->generate_query_get($request)->count();
   }
 
-//   public function store(UserRequest $request)
-//   {
-//     try {
-//       $values = $request->validated();
-//       $values["password"] = Hash::make($values["password"]);
-//       $user = User::create($values);
+  public function store(ProdukRequest $request)
+  {
+    try {
+      $values = $request->validated();
+      $produk = Produk::create($values);
 
-//       $response = \response_success_default("Berhasil menambahkan user!", $user->id, route("app.users.show", $user->id));
-//     } catch (\Exception $e) {
-//       ErrorService::error($e, "Gagal store user!");
-//       $response = \response_errors_default();
-//     }
+      $response = \response_success_default("Berhasil menambahkan produk!", $produk->id, route("app.produk.show", $produk->id));
+    } catch (\Exception $e) {
+      ErrorService::error($e, "Gagal store produk!");
+      $response = \response_errors_default();
+    }
 
-//     return $response;
-//   }
+    return $response;
+  }
 
-//   public function update(UserRequest $request, User $user)
-//   {
-//     try {
-//       $user_id = $user->id;
-//       $values = $request->validated();
-//       if ($values["password"]) {
-//         $values["password"] = Hash::make($values["password"]);
-//       } else {
-//         unset($values["password"]);
-//       }
+  public function update(ProdukRequest $request, Produk $produk)
+  {
+    try {
+      $values = $request->validated();
+      $produk->update($values);
 
-//       // dd($values);
-//       $user->update($values);
+      $response = \response_success_default("Berhasil update data produk!", $produk->id, route("app.produk.show", $produk->id));
+    } catch (\Exception $e) {
+      ErrorService::error($e, "Gagal update produk!");
+      $response = \response_errors_default();
+    }
 
-//       $response = \response_success_default("Berhasil update data user!", $user_id, route("app.users.show", $user->id));
-//     } catch (\Exception $e) {
-//       ErrorService::error($e, "Gagal update user!");
-//       $response = \response_errors_default();
-//     }
-
-//     return $response;
-//   }
+    return $response;
+  }
 
   public function get_admin_online()
   {
