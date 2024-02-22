@@ -39,6 +39,14 @@
                   </a>
               </li>
 
+              <li
+                  class="sidebar-item {{ request()->segment(2) == 'transaksi' ? 'active' : '' }}">
+                  <a href="{{ route('app.transaksi.index') }}" class='sidebar-link'>
+                      <i class="bi bi-receipt-cutoff"></i>
+                      <span>Transaksi</span>
+                  </a>
+              </li>
+
               @if (check_authorized("003U|004R"))
                 <li
                     class="sidebar-item {{ request()->segment(2) == 'users' ? 'active' : '' }}">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Apps\ProjectSettingController;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\UserController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Apps\TransaksiController;
 use App\Models\SessionToken;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,9 @@ Route::middleware(["auth", "check_maintanance", "check_session_token"])->group(f
 
   Route::post("/app/produk/get", [ProdukController::class, "get"])->name("app.produk.get");
   Route::resource("/app/produk", ProdukController::class, ["as" => "app"]);
+
+  Route::post("/app/transaksi/get", [TransaksiController::class, "get"])->name("app.transaksi.get");
+  Route::resource("/app/transaksi", TransaksiController::class, ["as" => "app"]);
 });
 
 Route::get("/maintenance", function() {
